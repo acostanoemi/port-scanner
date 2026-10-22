@@ -1,6 +1,6 @@
 # port-scanner
 
-Escáner de puertos educativo, hecho con Python. Le pasás una IP o un nombre y te dice qué puertos conocidos tiene abiertos, o sea qué servicios está exponiendo esa máquina.
+Escáner de puertos educativo, hecho con Python. Le pasás una IP o un nombre y te dice qué puertos tiene abiertos, o sea qué servicios está exponiendo esa máquina. Escanea rangos completos usando hilos en paralelo para que sea rápido.
 
 Es el complemento del [packet-sniffer](https://github.com/acostanoemi/packet-sniffer): el sniffer **escucha** el tráfico de forma pasiva; este **toca** puertos de forma activa para ver cuáles están abiertos.
 
@@ -18,26 +18,32 @@ Blancos para practicar con permiso:
 
 Por cada puerto, el scanner intenta abrir una conexión TCP normal. Si conecta, hay un servicio escuchando (puerto abierto); si la rechazan o no contesta, está cerrado. Es tráfico común, por eso **no necesita sudo**.
 
+Para escanear miles de puertos sin tardar horas, usa **hilos**: lanza muchas pruebas en paralelo en vez de esperar una por una. Funciona bien porque el scanner pasa casi todo el tiempo esperando a la red, no calculando; mientras un hilo espera, los otros trabajan.
+
 ## Requisitos
 
-Solo Python 3. No usa librerías externas (el módulo `socket` viene con Python).
+Solo Python 3. No usa librerías externas.
 
 ## Uso
 
 ```bash
-python3 port_scanner.py                  # escanea 127.0.0.1
-python3 port_scanner.py 192.168.0.1      # escanea tu router
-python3 port_scanner.py scanme.nmap.org -t 1
+python3 port_scanner.py                          # 127.0.0.1, puertos 1-1024
+python3 port_scanner.py 192.168.0.1              # tu router
+python3 port_scanner.py scanme.nmap.org --hasta 65535
+python3 port_scanner.py 192.168.0.1 --desde 1 --hasta 100 --hilos 200
 ```
 
 | Opción | Qué hace |
 |--------|----------|
 | `host` | IP o nombre a escanear (default: `127.0.0.1`) |
-| `-t`, `--timeout` | Segundos a esperar por puerto antes de darlo por cerrado (default: 0.5) |
+| `--desde` | Primer puerto del rango (default: 1) |
+| `--hasta` | Último puerto del rango (default: 1024) |
+| `--hilos` | Cuántos puertos probar en paralelo (default: 100) |
+| `-t`, `--timeout` | Segundos a esperar por puerto (default: 0.5) |
 
 ## Roadmap
 
 - [x] v1: escanear los puertos conocidos de una máquina
-- [ ] v2: escanear un rango completo de puertos (1-1024 o 1-65535)
-- [ ] v3: acelerar con hilos (escanear muchos puertos en paralelo)
-- [ ] v4: banner grabbing (leer qué versión de servicio corre en cada puerto)
+- [x] v2: escanear un rango completo de puertos, acelerado con hilos
+- [ ] v3: banner grabbing (leer qué versión de servicio corre en cada puerto)
+- [ ] v4: barra de progreso para rangos grandes
