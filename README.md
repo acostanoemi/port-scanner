@@ -4,7 +4,7 @@ Escáner de puertos educativo, hecho con Python. Le pasás una IP o un nombre y 
 
 Es el complemento del [packet-sniffer](https://github.com/acostanoemi/packet-sniffer): el sniffer **escucha** el tráfico de forma pasiva; este **toca** puertos de forma activa para ver cuáles están abiertos.
 
-## ⚠️ Uso ético y legal
+## Uso ético y legal
 
 Escaneá **solo tus propias máquinas o con permiso explícito**. Un escáner de puertos es la antesala técnica de un ataque: sondea qué servicios expone un equipo para saber por dónde entrar. Escanear equipos ajenos es ilegal (en Argentina, ley 26.388).
 
